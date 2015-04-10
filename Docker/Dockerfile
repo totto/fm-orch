@@ -5,7 +5,7 @@ FROM azul/zulu-openjdk:8
 MAINTAINER Totto (totto@totto.org)
 
 RUN apt-get -qq update \
-    && apt-get -yqq install ca-certificates ssl-cert 
+    && apt-get -yqq install ca-certificates ssl-cert wget
 
 # copy zip from local folder to container
 RUN wget -P /opt https://s3-us-west-2.amazonaws.com/wso2-stratos/wso2esb-4.8.1.zip && \
