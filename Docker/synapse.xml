@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+ 
+<!-- Using the  file system as transport medium using VFS transport listener and sender -->
+<definitions xmlns="http://ws.apache.org/ns/synapse">
+ 
+    <proxy name="StockQuoteProxy" transports="vfs">
+        <parameter name="transport.vfs.FileURI">file:///tmp/test/in</parameter> <!--CHANGE-->
+        <parameter name="transport.vfs.ContentType">application/octet-stream</parameter>
+        <parameter name="transport.vfs.FileNamePattern">.*.*</parameter>
+        <parameter name="transport.PollInterval">15</parameter>
+        <parameter name="transport.vfs.MoveAfterProcess">file:///tmp/test/original</parameter> <!--CHANGE-->
+        <parameter name="transport.vfs.MoveAfterFailure">file:///tmp/test/failure</parameter> <!--CHANGE-->
+        <parameter name="transport.vfs.ActionAfterProcess">MOVE</parameter>
+        <parameter name="transport.vfs.ActionAfterFailure">MOVE</parameter>
+ 
+        <target>
+      <inSequence>
+              <log level="full"/>
+              <property name="transport.vfs.ReplyFileName" expression="$trp:FILE_NAME" scope="transport"/>
+              <property name="OUT_ONLY" value="true"/>
+              <send>
+                  <endpoint name="endpoint_urn_uuid_A1546EFFD75FC9CCED785986339425964585275">
+                      <address uri="vfs:file:///tmp/test/copy"/>
+                  </endpoint>
+              </send>
+          </inSequence>
+ 
+        </target>
+    </proxy>
+ 
+</definitions>
